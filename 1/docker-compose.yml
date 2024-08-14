@@ -1,0 +1,76 @@
+version: '3.8'
+services:
+  mongo-rs0-primary:
+    image: mongo:latest
+    hostname: mongo-rs0-primary
+    container_name: mongo-rs0-primary
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 1234
+    volumes:
+      - ./rs_0_mongo/data:/data
+      - ./rs_0_mongo/log:/var/log/mongodb
+      - ./rs_0_mongo/mongos.conf:/etc/mongos.conf
+      - ./mongodb.key:/etc/mongodb.key
+    command:
+      - '--config'
+      - '/etc/mongos.conf'
+      - '--keyFile'
+      - '/etc/mongodb.key'
+    network_mode: host
+
+  mongo-rs1-secondary:
+    image: mongo:latest
+    hostname: mongo-rs1-secondary
+    container_name: mongo-rs1-secondary
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 1234
+    volumes:
+      - ./rs_1_mongo/data:/data
+      - ./rs_1_mongo/log:/var/log/mongodb
+      - ./rs_1_mongo/mongos.conf:/etc/mongos.conf
+      - ./mongodb.key:/etc/mongodb.key
+    command:
+      - '--config'
+      - '/etc/mongos.conf'
+      - '--keyFile'
+      - '/etc/mongodb.key'
+    network_mode: host
+
+  mongo-config:
+    image: mongo:latest
+    hostname: mongo-config
+    container_name: mongo-config
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 1234
+    volumes:
+      - ./mongo_config/data:/data
+      - ./mongo_config/log:/var/log/mongodb
+      - ./mongo_config/mongos.conf:/etc/mongos.conf
+      - ./mongodb.key:/etc/mongodb.key
+    command:
+      - '--config'
+      - '/etc/mongos.conf'
+      - '--keyFile'
+      - '/etc/mongodb.key'
+    network_mode: host
+
+  mongos:
+    image: mongo:latest
+    hostname: mongos
+    container_name: mongos
+    restart: always
+    volumes:
+      - ./mongos/mongos.conf:/etc/mongos.conf
+      - ./mongos/log:/var/log/mongodb
+      - ./mongodb.key:/etc/mongodb.key
+    command: ["mongos", "-f", "/etc/mongos.conf", "--keyFile", "/etc/mongodb.key"]
+    depends_on:
+      - mongo-config
+      - mongo-rs0-primary
+    network_mode: host
