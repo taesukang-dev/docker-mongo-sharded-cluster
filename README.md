@@ -2,7 +2,7 @@
 
 > 이 프로젝트는 Sharded Mongo Cluster 를 Docker 로 올려보며 간단하게 알아봅니다. <br />
 > production level에서는 전혀 권장되지 않는 설정입니다.<br />
-> <a href="https://liltdevs.tistory.com/216">참고 글. MongoDB 총정리</a>
+> <a href="https://liltdevs.tistory.com/216">참고 글. MongoDB 총정리</a> <br />
 > <a href="https://liltdevs.tistory.com/217">정체된 MongoDB Sharded Cluster 블로그 글</a>
 
 <img src="mongo.drawio.png" />
